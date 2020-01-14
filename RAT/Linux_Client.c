@@ -11,7 +11,7 @@
 int main()
 {
 	struct sockaddr_in ServerAddr;
-	char ServerAddrStr[] = "172.30.159.1";
+	char ServerAddrStr[] = "127.0.0.1";
 	int ClientSocket;
 	int ServerPort = 8888;
 	int addr_len = sizeof(ServerAddr);
