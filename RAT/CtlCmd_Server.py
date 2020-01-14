@@ -1,7 +1,7 @@
 import socket
 import time
 
-TCP_IP = '172.30.159.1'
+TCP_IP = '127.0.0.1'
 TCP_PORT = 8888
 ADDR = (TCP_IP, TCP_PORT)
 
