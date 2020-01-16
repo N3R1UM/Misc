@@ -65,10 +65,6 @@ int main()
 			strcpy(sendbuf, dir);
 			memset(dir, 0, 200);
 		}
-		else if(!memcmp(buf, "exit", 4))
-		{
-			break;
-		}
 		else
 		{
 			fp = NULL;
